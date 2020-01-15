@@ -1,0 +1,28 @@
+version: "3"
+volumes:
+  mysql:
+services:
+  app:
+    build: .                 #dockercompose.ymlと同じディレクトリに設定
+    depends_on:
+      - mysql                 #app起動まえにmysql起動
+    volumes:
+      - .:/rails             #カレントディレクトリーを/railsにバインドマウント
+      - mysql:/var/run/mysqld
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql2://root:koukic@mysql:3306/sample_app_development
+      RAILS_ENV: development
+      NODE_ENV: development
+    command: "bundle exec puma -C config/puma.rb"
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - .:/rails
+      - mysql:/var/run/mysqld
+    ports:
+      - 3306:3306
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-file-format=Barracuda --innodb-file-format-max=Barracuda --innodb-large-prefix=on
+    environment:
+      MYSQL_ROOT_PASSWORD: koukic
