@@ -3,11 +3,11 @@ volumes:
   mysql:
 services:
   app:
-    build: .                 #dockercompose.ymlと同じディレクトリに設定
+    build: .
     depends_on:
-      - mysql                 #app起動まえにmysql起動
+      - mysql
     volumes:
-      - .:/rails             #カレントディレクトリーを/railsにバインドマウント
+      - .:/rails
       - mysql:/var/run/mysqld
     ports:
       - "3000:3000"
